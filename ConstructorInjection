@@ -1,1 +1,87 @@
-/
+// MavenDependencies: 
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>SpringConstructorInjection</groupId>
+  <artifactId>SpringConstructorInjection</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <release>17</release>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <properties>
+        <spring.version>6.0.9</spring.version>
+    </properties> 
+    <dependencies>
+       <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+         </dependencies>
+  
+</project>
+
+
+//POJO class
+
+package mypack;
+public class InjectConstructor
+{
+    private String message=null;
+    public String getMessage() {
+        return message;
+    }
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    public InjectConstructor(String message)
+    {
+        this.message=message;
+    }
+}
+
+//Main class:
+package mypack;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Main {
+public static void main(String[] args)
+{
+    BeanFactory beanfactory=new ClassPathXmlApplicationContext("injection.xml");
+    InjectConstructor ic=(InjectConstructor)beanfactory.getBean("a1");
+    System.out.println(ic.getMessage());
+}
+}
+
+
+//injection.xml file
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+    <bean id="a1" class="mypack.InjectConstructor">
+        <constructor-arg value="Abc"/>
+    </bean>
+</beans>
+
+
