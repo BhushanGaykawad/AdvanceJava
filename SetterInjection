@@ -1,0 +1,138 @@
+//POJO class
+
+package mypack;
+
+import java.beans.ConstructorProperties;
+
+public class InjectSetter
+{
+    public InjectSetter() {
+			System.out.println("Inside InjectSetter no-arg constructor");
+	}
+	private String message=null;
+    	private int num;
+
+    public void setMessage(String message) 
+    {
+        System.out.println("in setMessage method");
+        this.message = message;
+    }
+
+    public void setNum(int num) 
+    {
+        System.out.println("in setNum method");
+        this.num = num;
+    }
+    public String getMessage() {
+        return message;
+    }
+    public int getNum() {
+        return num;
+    }
+}
+
+
+
+
+//Main Class
+
+package mypack;
+
+import mypack.InjectSetter;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Main {
+public static void main(String[] args)
+{
+    BeanFactory beanfactory=new ClassPathXmlApplicationContext("injection.xml");
+    System.out.println("after beanfactory creation");
+    InjectSetter ic=(InjectSetter)beanfactory.getBean("a1");
+    System.out.println(ic.getMessage());
+    System.out.println(ic.getNum());
+}
+}
+
+
+//MavenDependencies:
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>SpringSetterInjection</groupId>
+  <artifactId>SpringSetterInjection</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <release>17</release>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <properties>
+        <spring.version>6.0.9</spring.version>
+    </properties> 
+    <dependencies>
+       <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+         </dependencies>
+  
+</project>
+
+//XMLfile:
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>SpringSetterInjection</groupId>
+  <artifactId>SpringSetterInjection</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <release>17</release>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <properties>
+        <spring.version>6.0.9</spring.version>
+    </properties> 
+    <dependencies>
+       <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+         </dependencies>
+  
+</project>
+
+
