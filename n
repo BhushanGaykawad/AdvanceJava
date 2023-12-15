@@ -1,0 +1,166 @@
+//Entity class:
+package com.example.demo;
+public class Book 
+{
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "["+bookName+"   "+price+"]";
+	}
+	private String bookName;
+	private long price;
+
+	public String getBookName() {
+		return bookName;
+	}
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
+	public long getPrice() {
+		return price;
+	}
+	public void setPrice(long price) {
+		this.price = price;
+	}
+}
+
+//Controller
+
+package com.example.demo;
+
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+@Controller
+public class BookNewController
+{
+	@GetMapping("book")
+	public String before()
+	{
+ 		return "bookNew";
+	}
+	
+	
+	@PostMapping("book")
+	public String afterSubmit(@RequestParam("bookname") String name,@RequestParam("price") long bookprice,Model model) 
+	{
+		// new way to read request parameter
+		
+		Book book=new Book();
+		book.setBookName(name);
+		book.setPrice(bookprice);
+		model.addAttribute("mybook", book);
+		return "success";
+	}
+}
+
+//Aspect Declaration class:
+
+package com.example.demo;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
+
+@Aspect
+@Component
+public class SampleAspect 
+{
+	 @Pointcut("execution(* BookNewController.*(..))")  
+	 public void beforepointcut(){}//pointcut name 
+	 
+	 @Pointcut("execution(* BookNewController.*(..))")  
+	 public void afterpointcut(){}//pointcut name
+	      
+	    @Before("beforepointcut()") //applying pointcut on before advice  
+	    public void myadvice1(JoinPoint jp)//it is advice (before advice)  
+	    {  
+	        System.out.println("Before the method");  
+	        System.out.println("Method Signature: "  + jp.getSignature());  
+	    }  
+	    
+	    @After("afterpointcut()")
+	    public void myadvice2(JoinPoint jp)//it is advice (after advice)  
+	    {  
+	        System.out.println("After the method");  
+	        System.out.println("Method Signature: "  + jp.getSignature());  
+	    }  
+}
+//Main method class:
+package com.example.demo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+
+@SpringBootApplication
+@EnableAspectJAutoProxy(proxyTargetClass=true) 
+public class SpringAopApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SpringAopApplication.class, args);
+	}
+
+}
+
+//thyme file:bookNew.html
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<form th:action="@{/book}"  method="post">
+    <table border="1">
+        <tr>
+            <td>Enter Name</td>
+            <td><input type="text" name="bookname" /></td>
+        </tr>
+        <tr>
+            <td>Enter Price</td>
+            <td><input type="text" name="price" /></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Submit" /></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
+
+//thyme file:success.html
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<p th:text="${mybook.bookName}">
+<br>
+<p th:text="${mybook.price}">
+
+</body>
+</html>
+
+//application.Properties
+
+spring.mvc.view.prefix="/"
+spring.mvc.view.suffix=".html"
+
+
+/*
+Dependencies selected as:
+-Spring Web
+--Thymeleaf
+-- SpringBoot DevTools
+*?
+
